@@ -203,9 +203,10 @@ def main():
         if uploaded_file is not None:
             process_uploaded_file(uploaded_file, session)
             st.success("File uploaded successfully!")
+            process_uploaded_file(uploaded_file, session)
             # Trigger the data ingestion process here
             # (e.g., call a function to process the uploaded file)
-
+    
         # Custom CSS for better styling
         st.markdown("""
             <style>
