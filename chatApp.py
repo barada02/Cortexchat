@@ -1,4 +1,10 @@
-import streamlit as st # Import python packages
+import streamlit as st
+
+# Set the page configuration first
+st.set_page_config(layout="wide", page_title="Document Chat Assistant")
+
+# Import other necessary modules
+from setup import initialize_environment, process_uploaded_file
 from snowflake.snowpark import Session
 from snowflake.cortex import Complete
 from snowflake.core import Root
@@ -8,6 +14,9 @@ import pandas as pd
 import json
 
 pd.set_option("max_colwidth",None)
+
+# Call the setup function when the app loads
+initialize_environment()
 
 ### Default Values
 NUM_CHUNKS = 3 # Num-chunks provided as context. Play with this to check how it affects your accuracy
@@ -201,8 +210,14 @@ def answer_question(myquestion):
 
 def main():
     try:
-        st.set_page_config(layout="wide", page_title="Document Chat Assistant")
-        
+        uploaded_file = st.sidebar.file_uploader("Upload Document", type=["pdf"], key="upload")
+
+        if uploaded_file is not None:
+            process_uploaded_file(uploaded_file, session)
+            st.success("File uploaded successfully!")
+            # Trigger the data ingestion process here
+            # (e.g., call a function to process the uploaded file)
+
         # Custom CSS for better styling
         st.markdown("""
             <style>
