@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(layout="wide", page_title="Document Chat Assistant")
 
 # Import other necessary modules
-from setup import initialize_environment, process_uploaded_file, get_snowflake_session
+from setup import  process_uploaded_file, get_snowflake_session, setup_environment
 from snowflake.snowpark import Session
 from snowflake.cortex import Complete
 from snowflake.core import Root
