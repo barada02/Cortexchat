@@ -120,5 +120,5 @@ def process_uploaded_file(uploaded_file, session):
 # Function to initialize the environment
 
 #def initialize_environment():
-    session = get_snowflake_session()
-    setup_environment(session)
+    #session = get_snowflake_session()
+    #setup_environment(session)
