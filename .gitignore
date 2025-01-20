@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment
+.env
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Streamlit Secrets
+.streamlit/secrets.toml
+
+# Other
+*.log
+*.sqlite3
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
