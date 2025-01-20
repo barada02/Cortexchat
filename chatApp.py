@@ -68,7 +68,7 @@ def config_options():
                                          'llama2-70b-chat',
                                          'gemma-7b'), key="model_name")
 
-        categories = session.table('docs_chunks_table').select('category').distinct().collect()
+        categories = session.table('cdocs_chunks_table').select('category').distinct().collect()
 
         cat_list = ['ALL']
         for cat in categories:
@@ -171,7 +171,7 @@ def create_prompt (myquestion):
                provided between <chat_history> and </chat_history> tags..
                When ansering the question contained between <question> and </question> tags
                be concise and do not hallucinate. 
-               If you don´t have the information just say so.
+               If you don't have the information just say so.
                
                Do not mention the CONTEXT used in your answer.
                Do not mention the CHAT HISTORY used in your asnwer.
@@ -248,7 +248,7 @@ def main():
         st.markdown("<div class='document-section'>", unsafe_allow_html=True)
         st.subheader("📋 Available Documents")
         st.write("Here are the documents that I can help you with:")
-        docs_available = session.sql("ls @docs").collect()
+        docs_available = session.sql("ls @cdocs").collect()
         list_docs = []
         for doc in docs_available:
             list_docs.append(doc["name"])
@@ -283,7 +283,7 @@ def main():
                     if relative_paths != "None":
                         with st.sidebar.expander("📑 Related Documents"):
                             for path in relative_paths:
-                                cmd2 = f"select GET_PRESIGNED_URL(@docs, '{path}', 360) as URL_LINK from directory(@docs)"
+                                cmd2 = f"select GET_PRESIGNED_URL(@cdocs, '{path}', 360) as URL_LINK from directory(@cdocs)"
                                 df_url_link = session.sql(cmd2).to_pandas()
                                 url_link = df_url_link._get_value(0,'URL_LINK')
                             
