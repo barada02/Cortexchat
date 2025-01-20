@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(layout="wide", page_title="Document Chat Assistant")
 
 # Import other necessary modules
-from setup import initialize_environment, process_uploaded_file
+from setup import initialize_environment, process_uploaded_file, get_snowflake_session
 from snowflake.snowpark import Session
 from snowflake.cortex import Complete
 from snowflake.core import Root
@@ -34,24 +34,12 @@ COLUMNS = [
     "category"
 ]
 
-# Establish a connection to Snowflake using Streamlit's secrets
-try:
-    connection_parameters = {
-        "account": st.secrets["connections"]["snowflake"]["account"],
-        "user": st.secrets["connections"]["snowflake"]["user"],
-        "password": st.secrets["connections"]["snowflake"]["password"],
-        "role": st.secrets["connections"]["snowflake"]["role"],
-        "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
-        "database": st.secrets["connections"]["snowflake"]["database"],
-        "schema": st.secrets["connections"]["snowflake"]["schema"]
-    }
+# Use the singleton session
+session = get_snowflake_session()
+
+root = Root(session)
     
-    session = Session.builder.configs(connection_parameters).create()
-    root = Root(session)
-    
-    svc = root.databases[CORTEX_SEARCH_DATABASE].schemas[CORTEX_SEARCH_SCHEMA].cortex_search_services[CORTEX_SEARCH_SERVICE]
-except snowflake.connector.errors.Error as e:
-    st.error(f"Failed to connect to Snowflake: {e}")
+svc = root.databases[CORTEX_SEARCH_DATABASE].schemas[CORTEX_SEARCH_SCHEMA].cortex_search_services[CORTEX_SEARCH_SERVICE]
 
 ### Functions
      

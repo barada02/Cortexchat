@@ -2,20 +2,23 @@ import snowflake.connector
 from snowflake.snowpark import Session
 import streamlit as st
 
-# Function to establish a connection to Snowflake
+# Singleton session
+_session = None
 
-def connect_to_snowflake():
-    connection_parameters = {
-        "account": st.secrets["connections"]["snowflake"]["account"],
-        "user": st.secrets["connections"]["snowflake"]["user"],
-        "password": st.secrets["connections"]["snowflake"]["password"],
-        "role": st.secrets["connections"]["snowflake"]["role"],
-        "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
-        "database": st.secrets["connections"]["snowflake"]["database"],
-        "schema": st.secrets["connections"]["snowflake"]["schema"]
-    }
-    session = Session.builder.configs(connection_parameters).create()
-    return session
+def get_snowflake_session():
+    global _session
+    if _session is None:
+        connection_parameters = {
+            "account": st.secrets["connections"]["snowflake"]["account"],
+            "user": st.secrets["connections"]["snowflake"]["user"],
+            "password": st.secrets["connections"]["snowflake"]["password"],
+            "role": st.secrets["connections"]["snowflake"]["role"],
+            "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
+            "database": st.secrets["connections"]["snowflake"]["database"],
+            "schema": st.secrets["connections"]["snowflake"]["schema"]
+        }
+        _session = Session.builder.configs(connection_parameters).create()
+    return _session
 
 # Function to check and create database, schema, stage, and table
 
@@ -117,5 +120,5 @@ def process_uploaded_file(uploaded_file, session):
 # Function to initialize the environment
 
 def initialize_environment():
-    session = connect_to_snowflake()
+    session = get_snowflake_session()
     setup_environment(session)
