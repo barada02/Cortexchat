@@ -16,7 +16,7 @@ import json
 pd.set_option("max_colwidth",None)
 
 # Call the setup function when the app loads
-initialize_environment()
+#initialize_environment()
 
 ### Default Values
 NUM_CHUNKS = 3 # Num-chunks provided as context. Play with this to check how it affects your accuracy
@@ -40,7 +40,7 @@ session = get_snowflake_session()
 root = Root(session)
     
 svc = root.databases[CORTEX_SEARCH_DATABASE].schemas[CORTEX_SEARCH_SCHEMA].cortex_search_services[CORTEX_SEARCH_SERVICE]
-
+setup_environment(session)
 ### Functions
      
 def config_options():
